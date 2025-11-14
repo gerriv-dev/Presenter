@@ -1,4 +1,0 @@
-ruff
-pyside6
-quart
-sqlalchemy
