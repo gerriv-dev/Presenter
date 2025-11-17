@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+  --shadow-hard: var(--spacing) var(--spacing) black;
+}
+
+input,
+select {
+  @apply rounded-lg border p-2 outline-none;
+}
