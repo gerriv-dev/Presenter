@@ -4,6 +4,7 @@ export default function App() {
   const [showControls, setShowControls] = useState(false);
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [files, setFiles] = useState<string[]>([]);
+  const [updateFiles, setUpdateFiles] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +17,7 @@ export default function App() {
       body: formData,
     });
     setFiles([]);
+    setUpdateFiles(!updateFiles);
   };
 
   const startPresentation = async (file: string) => {
@@ -46,7 +48,7 @@ export default function App() {
       setFiles(data.files);
     };
     getFiles();
-  }, [files]);
+  }, [updateFiles]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between bg-white">
