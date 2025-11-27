@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --shadow-hard: 2px 2px 0px black;
+}
+
+.control {
+  @apply aspect-square w-1/2 rounded-xl bg-black text-5xl text-white;
+}

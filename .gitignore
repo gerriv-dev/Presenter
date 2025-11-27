@@ -3,6 +3,9 @@
 .venv
 __pycache__
 
-# Setup-Frontend
+# Frontend
 node_modules
 public
+
+# Server
+powerpoint
