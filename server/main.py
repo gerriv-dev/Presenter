@@ -82,7 +82,3 @@ async def ws() -> None:
     finally:
         task.cancel()
         await task
-
-
-if __name__ == "__main__":
-    app.run(port=8000)
