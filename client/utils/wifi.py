@@ -41,8 +41,7 @@ def check_internet_connection(timeout=5):
 
 
 def check_connection():
-    if check_wifi_connection():
-        if check_internet_connection():
-            return True
+    if check_internet_connection():
+        return True
 
     return False
