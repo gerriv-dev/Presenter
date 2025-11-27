@@ -3,7 +3,10 @@ name = "presenter"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "aspose-slides>=25.11.0",
     "hypercorn",
+    "pymupdf>=1.26.6",
     "pyside6",
     "quart",
+    "requests>=2.32.5",
 ]

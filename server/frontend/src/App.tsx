@@ -21,7 +21,7 @@ export default function App() {
   };
 
   const startPresentation = async (file: string) => {
-    const socket = new WebSocket(`ws://${location.host}/ws/controller`);
+    const socket = new WebSocket(`ws://${location.host}/ws`);
     socket.onmessage = () => {
       stopPresentation();
     };
@@ -56,7 +56,7 @@ export default function App() {
         <input
           type="file"
           name="file"
-          accept=".ppt,.pptx"
+          accept=".png,.jpg"
           ref={fileInputRef}
           onChange={uploadFile}
           hidden

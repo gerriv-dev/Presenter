@@ -1,7 +1,28 @@
+import asyncio
 from os import listdir
 from os.path import isfile, join
+from typing import AsyncGenerator
 
 from quart import Quart, render_template, request, send_from_directory, websocket
+
+
+class Broker:
+    def __init__(self) -> None:
+        self.connections = set()
+
+    async def publish(self, message: str) -> None:
+        for connection in self.connections:
+            await connection.put(message)
+
+    async def subscribe(self) -> AsyncGenerator[str, None]:
+        connection = asyncio.Queue()
+        self.connections.add(connection)
+        try:
+            while True:
+                yield await connection.get()
+        finally:
+            self.connections.remove(connection)
+
 
 app = Quart(
     __name__,
@@ -10,8 +31,7 @@ app = Quart(
     static_url_path="/static",
 )
 
-presenter = None
-controller = None
+broker = Broker()
 
 
 @app.after_request
@@ -47,27 +67,22 @@ async def powerpoint_upload():
     return ""
 
 
-@app.websocket("/ws/presenter")
-async def presenter_ws():
-    global presenter, controller
-    presenter = websocket
-    try:
-        while True:
-            message = await websocket.receive()
-            if controller is not None:
-                controller.send(message)
-    finally:
-        presenter = None
+async def _receive() -> None:
+    while True:
+        message = await websocket.receive()
+        await broker.publish(message)
 
 
-@app.websocket("/ws/controller")
-async def ws():
-    global presenter, controller
-    controller = websocket
+@app.websocket("/ws")
+async def ws() -> None:
     try:
-        while True:
-            message = await websocket.receive()
-            if presenter is not None:
-                presenter.send(message)
+        task = asyncio.ensure_future(_receive())
+        async for message in broker.subscribe():
+            await websocket.send(message)
     finally:
-        controller = None
+        task.cancel()
+        await task
+
+
+if __name__ == "__main__":
+    app.run(port=8000)
