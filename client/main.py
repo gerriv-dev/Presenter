@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
 
         self.controller = MainController(self)
 
-        self.showMaximized()  # Später zu Fullscreen ändern
+        self.showFullScreen()
 
 
 if __name__ == "__main__":
