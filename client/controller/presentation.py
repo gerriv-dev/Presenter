@@ -23,7 +23,7 @@ class PresentationController(QObject):
 
         self.index_view.set_message("Verbinde mit Server...")
         self.ws = WebSocket(
-            "ws://localhost:8000/ws",
+            "wss://presenter-nu.vercel.app/ws",
             self.handle_message,
             lambda: self.index_view.set_message("Verbunden."),
             lambda: self.index_view.set_message("Verbinde mit Server..."),
@@ -37,7 +37,9 @@ class PresentationController(QObject):
 
     def set_image(self, name):
         pixmap = QPixmap()
-        pixmap.loadFromData(requests.get("http://localhost:8000/pp/" + name).content)
+        pixmap.loadFromData(
+            requests.get("https://presenter-nu.vercel.app/pp/" + name).content
+        )
         self.view.setPixmap(
             pixmap.scaledToHeight(
                 self.root.height(), Qt.TransformationMode.SmoothTransformation
