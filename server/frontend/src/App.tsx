@@ -21,7 +21,7 @@ export default function App() {
   };
 
   const startPresentation = async (file: string) => {
-    const socket = new WebSocket(`ws://${location.host}/ws`);
+    const socket = new WebSocket(`wss://${location.host}/ws`);
     socket.onmessage = () => {
       stopPresentation();
     };
