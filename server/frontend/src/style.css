@@ -5,5 +5,5 @@
 }
 
 .control {
-  @apply aspect-square w-1/2 rounded-xl bg-black text-5xl text-white;
+  @apply aspect-square w-1/2 max-w-lg rounded-xl bg-black text-5xl text-white;
 }

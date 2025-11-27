@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 export default function App() {
-  const [showControls, setShowControls] = useState(false);
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [files, setFiles] = useState<string[]>([]);
+  const [file, setFile] = useState("");
   const [updateFiles, setUpdateFiles] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,9 +26,8 @@ export default function App() {
       stopPresentation();
     };
     setWs(socket);
-    ws?.send(`start:${file}`);
     console.log("verbunden");
-    setShowControls(true);
+    setFile(file);
   };
 
   const stopPresentation = () => {
@@ -36,7 +35,7 @@ export default function App() {
       ws.send("stop");
       ws.close();
       setWs(null);
-      setShowControls(false);
+      setFile("");
       console.log("getrennt");
     }
   };
@@ -70,14 +69,19 @@ export default function App() {
         </button>
       </nav>
       <main className="flex w-full flex-1 flex-col items-center justify-start p-4">
-        {showControls ? (
+        {file ? (
           <div className="relative flex w-full flex-1 items-center justify-center gap-4">
-            <button
-              onClick={stopPresentation}
-              className="absolute top-0 left-0 underline"
-            >
-              Zurück
-            </button>
+            <div className="absolute top-0 left-0 flex gap-4">
+              <button onClick={stopPresentation} className="underline">
+                Zurück
+              </button>
+              <button
+                onClick={() => ws?.send(`start:${file}`)}
+                className="underline"
+              >
+                Starten
+              </button>
+            </div>
             <button onClick={() => ws?.send("back")} className="control">
               &lt;
             </button>
