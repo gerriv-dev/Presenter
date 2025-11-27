@@ -11,7 +11,7 @@ export default function App() {
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
-    await fetch("http://localhost:8000/pp/upload", {
+    await fetch("/pp/upload", {
       method: "POST",
       body: formData,
     });
@@ -19,7 +19,7 @@ export default function App() {
   };
 
   const startPresentation = async (file: string) => {
-    const socket = new WebSocket("ws://localhost:8000/ws/controller");
+    const socket = new WebSocket(`ws://${location.host}/ws/controller`);
     socket.onmessage = () => {
       stopPresentation();
     };
@@ -41,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     const getFiles = async () => {
-      const response = await fetch("http://localhost:8000/pp");
+      const response = await fetch("/pp");
       const data: { files: string[] } = await response.json();
       setFiles(data.files);
     };
